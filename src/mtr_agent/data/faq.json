@@ -1,0 +1,7 @@
+[
+ {"id":"faq-octopus","title":"八達通 Octopus payment","text":"教學樣例：八達通（八达通 / Octopus）可作入閘和出閘支付示例。拍卡 tap card 後保留同一張卡完成行程；實際收費及適用範圍請查閱營運方資料。","keywords":["八達通","八达通","octopus","payment","pay","拍卡","支付","畀錢"],"source":"SYNTHETIC-FAQ-v1","page":1},
+ {"id":"faq-luggage","title":"行李 Luggage","text":"教學樣例：攜帶行李 luggage 或行李箱 suitcase 時，請留意通道與扶手電梯安全，具體尺寸限制及攜帶規定以營運方公告為準。本資料不提供已核實的行李尺寸限額。","keywords":["行李","luggage","suitcase","baggage"],"source":"SYNTHETIC-FAQ-v1","page":2},
+ {"id":"faq-accessibility","title":"無障礙 Accessibility","text":"教學樣例：輪椅 wheelchair、升降機 lift / elevator 與無障礙 accessibility 設施應先向車站職員確認可用情況。本示例沒有即時升降機狀態或無障礙路徑資料。","keywords":["輪椅","轮椅","升降機","电梯","無障礙","无障碍","accessibility","wheelchair","lift","elevator"],"source":"SYNTHETIC-FAQ-v1","page":3},
+ {"id":"faq-lost","title":"失物 Lost property","text":"教學樣例：遺失物品 lost property 或 lost and found 查詢，請向車站職員或營運方失物服務求助；提供遺失時間、路線及物品描述。此 Agent 不接受報失登記或個人身份資料。","keywords":["失物","遗失","遺失","lost","唔見","丢了"],"source":"SYNTHETIC-FAQ-v1","page":4},
+ {"id":"faq-service","title":"營運時間 Timetable and live service","text":"本教學資料不包含首班車 first train、尾班車 last train、實時班次 timetable、延誤 delay、服務中斷或票價 fare。請查閱港鐵官方網站 https://www.mtr.com.hk/ 或官方應用程式；本 Agent 不會生成未核實的時間、票價或即時狀態。","keywords":["首班","尾班","末班","first train","last train","timetable","delay","延誤","延误","票价","票價","fare","幾錢","多少钱","幾點","几点","即時","实时"],"source":"SYNTHETIC-FAQ-v1","page":5}
+]

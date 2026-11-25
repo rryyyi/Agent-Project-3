@@ -1,0 +1,40 @@
+{
+  "version": "synthetic-hk-2026-01",
+  "source": "SYNTHETIC-NETWORK-v1: manually authored educational topology; not operational data",
+  "transfer_minutes": 4,
+  "lines": {"TWL": "荃灣綫 / Tsuen Wan Line", "ISL": "港島綫 / Island Line", "EAL": "東鐵綫 / East Rail Line"},
+  "stations": [
+    {"id":"CEN","name":"中環","en":"Central","aliases":["中环","中環站","Central station"]},
+    {"id":"ADM","name":"金鐘","en":"Admiralty","aliases":["金钟","金鐘站"]},
+    {"id":"TST","name":"尖沙咀","en":"Tsim Sha Tsui","aliases":["TST","尖沙咀站"]},
+    {"id":"JOR","name":"佐敦","en":"Jordan","aliases":["佐敦站"]},
+    {"id":"YMT","name":"油麻地","en":"Yau Ma Tei","aliases":["YMT"]},
+    {"id":"MOK","name":"旺角","en":"Mong Kok","aliases":["Mongkok","旺角站"]},
+    {"id":"SHW","name":"上環","en":"Sheung Wan","aliases":["上环"]},
+    {"id":"SYP","name":"西營盤","en":"Sai Ying Pun","aliases":["西营盘"]},
+    {"id":"HKU","name":"香港大學","en":"HKU","aliases":["香港大学","Hong Kong University","University of Hong Kong"]},
+    {"id":"WAC","name":"灣仔","en":"Wan Chai","aliases":["湾仔","Wanchai"]},
+    {"id":"CAB","name":"銅鑼灣","en":"Causeway Bay","aliases":["铜锣湾","CWB"]},
+    {"id":"EXC","name":"會展","en":"Exhibition Centre","aliases":["会展","Exhibition Center"]},
+    {"id":"HUH","name":"紅磡","en":"Hung Hom","aliases":["红磡","HungHom"]},
+    {"id":"MKK","name":"旺角東","en":"Mong Kok East","aliases":["旺角东","Mongkok East"]},
+    {"id":"KOT","name":"九龍塘","en":"Kowloon Tong","aliases":["九龙塘"]}
+  ],
+  "edges": [
+    {"a":"CEN","b":"ADM","line":"TWL","minutes":2},
+    {"a":"ADM","b":"TST","line":"TWL","minutes":5},
+    {"a":"TST","b":"JOR","line":"TWL","minutes":2},
+    {"a":"JOR","b":"YMT","line":"TWL","minutes":2},
+    {"a":"YMT","b":"MOK","line":"TWL","minutes":2},
+    {"a":"HKU","b":"SYP","line":"ISL","minutes":2},
+    {"a":"SYP","b":"SHW","line":"ISL","minutes":2},
+    {"a":"SHW","b":"CEN","line":"ISL","minutes":2},
+    {"a":"CEN","b":"ADM","line":"ISL","minutes":2},
+    {"a":"ADM","b":"WAC","line":"ISL","minutes":2},
+    {"a":"WAC","b":"CAB","line":"ISL","minutes":2},
+    {"a":"ADM","b":"EXC","line":"EAL","minutes":4},
+    {"a":"EXC","b":"HUH","line":"EAL","minutes":5},
+    {"a":"HUH","b":"MKK","line":"EAL","minutes":4},
+    {"a":"MKK","b":"KOT","line":"EAL","minutes":3}
+  ]
+}

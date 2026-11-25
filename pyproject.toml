@@ -1,0 +1,48 @@
+[build-system]
+requires = ["hatchling>=1.26,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mtr-polyglot-agent"
+version = "0.1.0"
+description = "Evidence-grounded multilingual metro Agent with graph routing and reviewable PDF ingestion"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{name = "rryyyi"}]
+keywords = ["agent", "rag", "graph-rag", "mcp", "multilingual"]
+dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.32,<1", "pydantic>=2.10,<3", "httpx>=0.28,<1", "PyMuPDF>=1.25,<2"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3,<10", "pytest-cov>=6,<8", "ruff>=0.11,<1", "build>=1.2,<2"]
+models = ["sentence-transformers>=3.4,<6"]
+redis = ["redis>=5.2,<8"]
+mcp = ["mcp>=1.12,<2"]
+
+[project.scripts]
+mtr-agent = "mtr_agent.cli:main"
+
+[project.urls]
+Repository = "https://github.com/rryyyi/Agent-Project-3"
+Issues = "https://github.com/rryyyi/Agent-Project-3/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mtr_agent"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.coverage.run]
+source = ["mtr_agent"]
+
+[tool.coverage.report]
+show_missing = true
