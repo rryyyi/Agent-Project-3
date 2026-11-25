@@ -11,13 +11,13 @@ requires-python = ">=3.11"
 license = "MIT"
 authors = [{name = "rryyyi"}]
 keywords = ["agent", "rag", "graph-rag", "mcp", "multilingual"]
-dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.32,<1", "pydantic>=2.10,<3", "httpx>=0.28,<1", "PyMuPDF>=1.25,<2"]
+dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.32,<1", "pydantic>=2.10,<3", "httpx>=0.28,<1", "PyMuPDF>=1.25,<3"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.3,<10", "pytest-cov>=6,<8", "ruff>=0.11,<1", "build>=1.2,<2"]
-models = ["sentence-transformers>=3.4,<6"]
-redis = ["redis>=5.2,<8"]
-mcp = ["mcp>=1.12,<2"]
+models = ["sentence-transformers>=3.4,<7"]
+redis = ["redis>=5.2,<9"]
+mcp = ["mcp>=1.12,<3"]
 
 [project.scripts]
 mtr-agent = "mtr_agent.cli:main"
