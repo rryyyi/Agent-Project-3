@@ -78,6 +78,33 @@ def test_sessions_expire_capacity_and_concurrent_isolation():
     assert len(agent.sessions) <= 2
 
 
+def test_english_to_in_faq_is_not_route():
+    result = Agent().chat("How to pay with Octopus?")
+    assert result["intent"] == "knowledge"
+    assert result["evidence"][0]["document_id"] == "faq-octopus"
+
+
+def test_english_followup_and_unknown_explicit_origin():
+    agent = Agent()
+    agent.chat("Central去紅磡", "audit")
+    result = agent.chat("What about Mong Kok?", "audit")
+    assert result["route"]["origin"] == "CEN"
+    assert result["route"]["destination"] == "MOK"
+    assert agent.chat("咁由Airport去旺角呢？", "audit")["status"] == "clarification"
+    assert agent.chat("咁去Airport經旺角呢？", "audit")["status"] == "clarification"
+
+
+@pytest.mark.parametrize(
+    "message",
+    [
+        "Central去旺角再去Airport",
+        "Central to Mong Kok via Airport",
+    ],
+)
+def test_unmodeled_waypoints_require_clarification(message):
+    assert Agent().chat(message)["status"] == "clarification"
+
+
 def test_function_tools_validate_arguments_and_cache():
     tools = Tools()
     first = tools.call("route_plan", {"origin": "Central", "destination": "紅磡"})
@@ -85,6 +112,8 @@ def test_function_tools_validate_arguments_and_cache():
     assert first["result"] == second["result"]
     assert second["cache_hit"]
     assert {t["function"]["name"] for t in tools.schemas()} == {"route_plan", "knowledge_search"}
+    with pytest.raises(ValueError):
+        tools.call("route_plan", {"origin": "Airport via Central", "destination": "Hung Hom"})
     with pytest.raises(ValueError):
         tools.call("execute_shell", {})
     with pytest.raises(ValueError):

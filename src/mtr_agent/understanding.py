@@ -7,7 +7,7 @@ OPERATIONAL = re.compile(
     r"\bfare\b|\bdelay\b|\btimetable\b|\bfirst train\b|\blast train\b|\blive\b",
     re.I,
 )
-ROUTE = re.compile(r"去|到|點搭|怎么走|怎麼走|換乘|换乘|路線|路线|\bfrom\b|\bto\b|\broute\b", re.I)
+ROUTE = re.compile(r"去|到|點搭|怎么走|怎麼走|換乘|换乘|路線|路线|\bfrom\b|\broute\b", re.I)
 NEGATION = re.compile(r"唔係|不是|唔去|不去|未定|\bnot\b|\binstead\b", re.I)
 FOLLOWUP = re.compile(r"咁|呢|那|改去|換去|换去|\bwhat about\b|\bhow about\b|\binstead\b", re.I)
 
@@ -25,9 +25,14 @@ def understand(message: str, kb, context: dict | None = None) -> dict:
     )
     if OPERATIONAL.search(message):
         return {"intent": "knowledge", "query": message, "stations": ids}
-    if len(ids) >= 2 or ROUTE.search(message):
+    if (
+        len(ids) >= 2
+        or ROUTE.search(message)
+        or (ids and (FOLLOWUP.search(message) or re.search(r"\bto\b", message, re.I)))
+    ):
         base = {"intent": "route", "query": message, "stations": ids, "objective": objective}
-        if NEGATION.search(message) or len(ids) > 2:
+        waypoints = re.search(r"再去|再到|途經|途经|經由|经由|\bvia\b|\bthen\b", message, re.I)
+        if NEGATION.search(message) or len(ids) > 2 or waypoints:
             return {**base, "clarification": "請明確提供起點與終點；示例一次只規劃兩站行程。"}
         if len(ids) == 2:
             # Explicit direction markers win over mention order, including 'to A from B'.
@@ -48,16 +53,24 @@ def understand(message: str, kb, context: dict | None = None) -> dict:
             }
         if len(ids) == 1 and context.get("origin") and FOLLOWUP.search(message):
             mention = mentions[-1]
-            # A follow-up may contain a single known destination, not a second unknown one.
-            tail = message[mention["end"] :]
-            if not re.search(r"去|到|\bto\b", tail, re.I):
+            # Only a bounded destination-only grammar may reuse an old origin.
+            prefix = message[: mention["start"]].strip()
+            tail = message[mention["end"] :].strip()
+            allowed_prefix = re.fullmatch(
+                r"(?:咁|那|呢|改|換|换|去|到|\s|[,，])*|"
+                r"(?:what about|how about|to)\s*",
+                prefix,
+                re.I,
+            )
+            allowed_tail = re.fullmatch(r"[呢呀啊嗎吗?？!！.。\s]*", tail)
+            if allowed_prefix and allowed_tail:
                 return {
                     **base,
                     "origin": context["origin"],
                     "destination": ids[0],
                     "query": f"route {context['origin']} -> {ids[0]}; objective={objective}",
                 }
-        # Handle a true same-station question, rather than treating duplicated bilingual aliases as slots.
+        # Same-station questions require a direction marker between repeated aliases.
         if len(ids) == 1 and len(mentions) >= 2:
             between = message[mentions[0]["end"] : mentions[-1]["start"]]
             if re.search(r"去|到|\bto\b", between, re.I):

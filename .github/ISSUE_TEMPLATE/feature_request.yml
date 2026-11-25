@@ -1,0 +1,18 @@
+name: Feature request
+description: Propose a measurable improvement
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and user scenario
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior and acceptance evidence
+      description: Explain how we would validate correctness, quality or performance.
+    validations:
+      required: true

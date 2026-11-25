@@ -50,7 +50,8 @@ class Knowledge:
     def station_id(self, value: str) -> str:
         if value in self.stations:
             return value
-        ids = self.resolve(value)
-        if len(ids) != 1:
+        normalized = value.strip().casefold()
+        matches = {station for pattern, station in self._aliases if pattern.fullmatch(normalized)}
+        if len(matches) != 1:
             raise ValueError(f"Unknown station or ambiguous name: {value}")
-        return ids[0]
+        return matches.pop()

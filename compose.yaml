@@ -1,0 +1,32 @@
+services:
+  agent:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      MTR_API_KEY: ${MTR_API_KEY:-}
+      REDIS_URL: ${REDIS_URL:-}
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    init: true
+    mem_limit: 512m
+    cpus: 1.0
+  redis:
+    image: redis:7.4-alpine
+    profiles: [redis]
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+    expose:
+      - "6379"
+    read_only: true
+    tmpfs:
+      - /data:size=64m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true

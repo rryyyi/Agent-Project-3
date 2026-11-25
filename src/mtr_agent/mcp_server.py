@@ -14,8 +14,9 @@ def create_mcp(agent=None):
     @server.tool()
     def route_plan(origin: str, destination: str, objective: str = "fastest") -> dict:
         """Plan a route in the synthetic teaching graph; not a live timetable."""
-        return service.tools.call("route_plan", {"origin": origin, "destination": destination,
-                                                  "objective": objective})
+        return service.tools.call(
+            "route_plan", {"origin": origin, "destination": destination, "objective": objective}
+        )
 
     @server.tool()
     def knowledge_search(query: str, limit: int = 3) -> dict:

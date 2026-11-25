@@ -1,0 +1,25 @@
+{
+  "created_at": "2026-11-25T03:34:02.098027+00:00",
+  "python": "3.14.4",
+  "platform": "Windows",
+  "iterations": 500,
+  "concurrency": 8,
+  "unit": "ms",
+  "mean": 1.262,
+  "p50": 0.254,
+  "p95": 0.469,
+  "p99": 47.07,
+  "wall_ms": 143.235,
+  "requests_per_second": 3490.77,
+  "workload": [
+    "Central去紅磡",
+    "HKU去灣仔",
+    "Octopus payment",
+    "咁去旺角呢"
+  ],
+  "knowledge_version": "0b5a249b988dea89",
+  "limitations": [
+    "Warm-cache in-process offline calls; excludes HTTP, network and models",
+    "Synthetic 15-station/5-document dataset; not production capacity"
+  ]
+}

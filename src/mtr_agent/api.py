@@ -7,6 +7,7 @@ import threading
 import time
 import uuid
 from collections import Counter
+from typing import Annotated
 
 from fastapi import Body, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse, PlainTextResponse
@@ -23,8 +24,11 @@ def create_app(agent=None, api_key: str | None = None, max_inflight: int = 32) -
         raise ValueError("max_inflight must be positive")
     service = agent or Agent()
     secret = os.environ.get("MTR_API_KEY", "") if api_key is None else api_key
-    app = FastAPI(title="MTR Polyglot Agent", version=__version__,
-                  description="Synthetic metro Agent portfolio; not live travel advice.")
+    app = FastAPI(
+        title="MTR Polyglot Agent",
+        version=__version__,
+        description="Synthetic metro Agent portfolio; not live travel advice.",
+    )
     app.state.agent = service
     counts = Counter()
     metrics_lock = threading.Lock()
@@ -39,15 +43,24 @@ def create_app(agent=None, api_key: str | None = None, max_inflight: int = 32) -
         if secret and path != "/health":
             supplied = request.headers.get("authorization", "")
             if not hmac.compare_digest(supplied.encode(), ("Bearer " + secret).encode()):
-                return JSONResponse({"detail": "Unauthorized", "request_id": request_id},
-                                    status_code=401, headers={"X-Request-ID": request_id})
+                return JSONResponse(
+                    {"detail": "Unauthorized", "request_id": request_id},
+                    status_code=401,
+                    headers={"X-Request-ID": request_id},
+                )
         length = request.headers.get("content-length", "0")
         if not length.isdigit() or int(length) > 16384:
-            return JSONResponse({"detail": "Request body too large"}, status_code=413,
-                                headers={"X-Request-ID": request_id})
+            return JSONResponse(
+                {"detail": "Request body too large"},
+                status_code=413,
+                headers={"X-Request-ID": request_id},
+            )
         if not admission.acquire(blocking=False):
-            return JSONResponse({"detail": "Server busy"}, status_code=503,
-                                headers={"Retry-After": "1", "X-Request-ID": request_id})
+            return JSONResponse(
+                {"detail": "Server busy"},
+                status_code=503,
+                headers={"Retry-After": "1", "X-Request-ID": request_id},
+            )
         try:
             response = await call_next(request)
             response.headers["X-Request-ID"] = request_id
@@ -66,17 +79,22 @@ def create_app(agent=None, api_key: str | None = None, max_inflight: int = 32) -
 
     @app.get("/ready")
     def ready():
-        return {"status": "ready", "knowledge_version": service.kb.version,
-                "mode": "llm-assisted" if service.llm else "offline"}
+        return {
+            "status": "ready",
+            "knowledge_version": service.kb.version,
+            "mode": "llm-assisted" if service.llm else "offline",
+        }
 
     @app.get("/metrics", response_class=PlainTextResponse)
     def metrics():
         with metrics_lock:
             snapshot = dict(counts)
-        return (f"mtr_requests_total {snapshot.get('requests', 0)}\n"
-                f"mtr_request_duration_ms_sum {snapshot.get('duration_ms', 0):.3f}\n"
-                f"mtr_sessions {len(service.sessions)}\n"
-                f"mtr_redis_errors_total {service.tools.cache.redis_errors}\n")
+        return (
+            f"mtr_requests_total {snapshot.get('requests', 0)}\n"
+            f"mtr_request_duration_ms_sum {snapshot.get('duration_ms', 0):.3f}\n"
+            f"mtr_sessions {len(service.sessions)}\n"
+            f"mtr_redis_errors_total {service.tools.cache.redis_errors}\n"
+        )
 
     @app.post("/v1/chat")
     def chat(payload: ChatRequest, request: Request):
@@ -93,7 +111,7 @@ def create_app(agent=None, api_key: str | None = None, max_inflight: int = 32) -
         return {"tools": service.tools.schemas()}
 
     @app.post("/v1/tools/{name}")
-    def tool_call(name: str, arguments: dict = Body(...)):
+    def tool_call(name: str, arguments: Annotated[dict, Body()]):
         try:
             return service.tools.call(name, arguments)
         except ValueError as exc:

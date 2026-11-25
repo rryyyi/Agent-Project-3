@@ -1,0 +1,14 @@
+.git
+.venv
+.superpowers
+__pycache__
+.pytest_cache
+.ruff_cache
+.env
+.env.*
+*.pdf
+artifacts
+htmlcov
+.coverage
+dist
+build

@@ -36,35 +36,65 @@ def extract_pdf(path: str | Path, snap_distance: float = 60, max_pages: int = 10
                     label = {"text": text, "bbox": bbox, "station_ids": ids}
                     labels.append(label)
                     if len(ids) == 1:
-                        station_labels.append((ids[0], ((bbox[0] + bbox[2]) / 2,
-                                                       (bbox[1] + bbox[3]) / 2)))
+                        station_labels.append(
+                            (ids[0], ((bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2))
+                        )
             segments = []
             for drawing in page.get_drawings():
                 for item in drawing["items"]:
                     if item[0] == "l":
-                        segments.append({"start": list(item[1]), "end": list(item[2]),
-                                         "color": list(drawing.get("color") or []),
-                                         "width": drawing.get("width"),
-                                         "path_id": drawing["seqno"]})
+                        segments.append(
+                            {
+                                "start": list(item[1]),
+                                "end": list(item[2]),
+                                "color": list(drawing.get("color") or []),
+                                "width": drawing.get("width"),
+                                "path_id": drawing["seqno"],
+                            }
+                        )
             candidates = []
             for i, segment in enumerate(segments):
                 nearest = []
                 for point in (segment["start"], segment["end"]):
-                    options = sorted((math.dist(point, center), sid)
-                                     for sid, center in station_labels)
-                    nearest.append(options[0] if options and options[0][0] <= snap_distance else None)
+                    options = sorted(
+                        (math.dist(point, center), sid) for sid, center in station_labels
+                    )
+                    nearest.append(
+                        options[0] if options and options[0][0] <= snap_distance else None
+                    )
                 if all(nearest) and nearest[0][1] != nearest[1][1]:
-                    candidates.append({"a": nearest[0][1], "b": nearest[1][1],
-                                       "segment_index": i, "page": index + 1,
-                                       "endpoint_distances": [round(x[0], 2) for x in nearest],
-                                       "status": "unreviewed", "method": "nearest-label-endpoints"})
-            pages.append({"page": index + 1, "width": page.rect.width,
-                          "height": page.rect.height, "labels": labels,
-                          "segments": segments, "candidate_edges": candidates,
-                          "needs_ocr": not bool(labels)})
-        return {"schema_version": "1", "filename": path.name,
-                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
-                "requires_review": True, "pages": pages,
-                "limitations": ["No timetable or travel-time inference", "No OCR in baseline",
-                                "Crossings, curved paths and label offsets require human review",
-                                "Only stations in the packaged alias vocabulary are matched"]}
+                    candidates.append(
+                        {
+                            "a": nearest[0][1],
+                            "b": nearest[1][1],
+                            "segment_index": i,
+                            "page": index + 1,
+                            "endpoint_distances": [round(x[0], 2) for x in nearest],
+                            "status": "unreviewed",
+                            "method": "nearest-label-endpoints",
+                        }
+                    )
+            pages.append(
+                {
+                    "page": index + 1,
+                    "width": page.rect.width,
+                    "height": page.rect.height,
+                    "labels": labels,
+                    "segments": segments,
+                    "candidate_edges": candidates,
+                    "needs_ocr": not bool(labels),
+                }
+            )
+        return {
+            "schema_version": "1",
+            "filename": path.name,
+            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "requires_review": True,
+            "pages": pages,
+            "limitations": [
+                "No timetable or travel-time inference",
+                "No OCR in baseline",
+                "Crossings, curved paths and label offsets require human review",
+                "Only stations in the packaged alias vocabulary are matched",
+            ],
+        }
