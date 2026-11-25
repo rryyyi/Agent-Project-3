@@ -56,9 +56,16 @@ class Router:
         segments = []
         triples = []
         for a, b, line, minutes in steps:
-            triples.append({"subject": a, "relation": "NEXT_ON_LINE", "object": b,
-                            "line": line, "minutes": minutes,
-                            "source": self.kb.network.source})
+            triples.append(
+                {
+                    "subject": a,
+                    "relation": "NEXT_ON_LINE",
+                    "object": b,
+                    "line": line,
+                    "minutes": minutes,
+                    "source": self.kb.network.source,
+                }
+            )
             if segments and segments[-1]["line"] == line:
                 segments[-1]["stations"].append(b)
                 segments[-1]["minutes"] += minutes
@@ -66,16 +73,19 @@ class Router:
                 segments.append({"line": line, "stations": [a, b], "minutes": minutes})
         transfers = max(0, len(segments) - 1)
         return {
-            "origin": origin, "destination": destination, "objective": objective,
+            "origin": origin,
+            "destination": destination,
+            "objective": objective,
             "stations": [origin] + [step[1] for step in steps],
-            "station_names": [self.kb.stations[s].name for s in
-                              [origin] + [step[1] for step in steps]],
-            "segments": segments, "transfers": transfers,
+            "station_names": [
+                self.kb.stations[s].name for s in [origin] + [step[1] for step in steps]
+            ],
+            "segments": segments,
+            "transfers": transfers,
             "transfer_stations": [s["stations"][0] for s in segments[1:]],
             "minutes": sum(step[3] for step in steps)
             + transfers * self.kb.network.transfer_minutes,
             "triples": triples,
-            "citations": [{"source": self.kb.network.source,
-                           "version": self.kb.network.version}],
+            "citations": [{"source": self.kb.network.source, "version": self.kb.network.version}],
             "disclaimer": "Synthetic demo travel times; not a timetable or live routing service.",
         }

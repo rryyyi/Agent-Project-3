@@ -41,8 +41,7 @@ class Knowledge:
             if not any(start < old[1] and end > old[0] for old in selected):
                 selected.append((start, end, station))
         return [
-            {"start": start, "end": end, "id": station}
-            for start, end, station in sorted(selected)
+            {"start": start, "end": end, "id": station} for start, end, station in sorted(selected)
         ]
 
     def resolve(self, text: str) -> list[str]:
