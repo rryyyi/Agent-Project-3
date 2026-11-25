@@ -44,4 +44,6 @@ Regression tests now cover all these cases. Full suite remained green after fixe
 
 ## Publication validation
 
-GitHub CI runs Python 3.11/3.12/3.13 and a Linux container build. Its actual status is available from the repository Actions tab; this local report does not claim remote jobs have passed before observing them. Local Docker engine unavailability does not verify the container recipe.
+GitHub CI run [45541417193](https://github.com/rryyyi/Agent-Project-3/actions/runs/45541417193), commit `283e86a37fc907a9890b280ab62c96dc0cfa42b9`, completed successfully: quality jobs for Python 3.11, 3.12 and 3.13, plus Linux container build and `docker run` route smoke test. This remotely verifies the container recipe despite the unavailable local Docker engine. Later commits may trigger new runs; use the Actions tab to inspect their status.
+
+The initial implementation was pushed to `main` and its remote SHA matched local HEAD. Repository description and topics were updated through authenticated GitHub API (HTTP 200). Local Markdown link checks found no missing file targets, and tracked text checks found no supplied contact details or common token/private-key markers. No resume PDF or credentials are tracked.

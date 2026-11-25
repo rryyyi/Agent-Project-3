@@ -354,7 +354,7 @@ src/mtr_agent/
 
 当前网络仅含 15 个站点、3 条线路的局部合成拓扑与 5 篇 FAQ；中文字符基线没有语言模型的泛化能力。BGE-M3 接入使用内存暴力余弦检索，适合演示，不适合大规模索引。向量 ANN、生产认证、共享会话存储、实时运营数据、OCR/VLM 和开放域意图抽取均应作为独立能力增加，再做专项验证。
 
-CI 覆盖 Python 3.11/3.12/3.13 的 lint、测试、评测与包构建，并提供容器构建任务；徽章展示 GitHub 实际运行状态。依赖更新由 Dependabot 提交，改动通过 PR 模板说明目的与验证。欢迎按 [贡献指南](CONTRIBUTING.md) 提交可复现问题；安全问题参见 [SECURITY.md](SECURITY.md)。
+CI 覆盖 Python 3.11/3.12/3.13 的 lint、测试、评测与包构建，并提供容器构建任务；[首次发布验证](https://github.com/rryyyi/Agent-Project-3/actions/runs/45541417193) 的三个 Python 版本和 Linux 容器构建/运行已全部通过。徽章展示最新 GitHub 实际运行状态。依赖更新由 Dependabot 提交，改动通过 PR 模板说明目的与验证。欢迎按 [贡献指南](CONTRIBUTING.md) 提交可复现问题；安全问题参见 [SECURITY.md](SECURITY.md)。
 
 ## 许可与资料
 
